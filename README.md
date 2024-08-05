@@ -1,6 +1,6 @@
 # Project: Calendar
 
-### [Site link](https://oksanas1.github.io/google-calendar-react/)
+### [Site link](https://66b154a08b3ab728bcd870ce--google-calendar-by-react.netlify.app/)
 
 Layout support desktop (up-to-1920) version
 
