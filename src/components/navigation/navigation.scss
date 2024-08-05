@@ -1,0 +1,55 @@
+@import "../../styles/varibles.scss";
+
+.calendar {
+  &__header {
+    position: sticky;
+    top: $height-box;
+    z-index: 15;
+    display: flex;
+    height: 100px;
+    padding-left: 50px;
+    background: $color-white;
+  }
+
+  &__day-label {
+    flex: 1;
+  }
+}
+
+.day-label {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+
+  &__day-name {
+    font-size: 14px;
+    text-transform: uppercase;
+
+    &_today-color {
+      color: $text-color-blue;
+    }
+
+    &_prev-day-color {
+      color: $text-color-grey;
+    }
+  }
+
+  &__day-number {
+    font-size: 22px;
+    width: 40px;
+    line-height: 40px;
+    text-align: center;
+
+    &_today-color {
+      border-radius: 50%;
+      background: $color-blue;
+      color: $text-color-white;
+    }
+
+    &_prev-day-color {
+      color: $text-color-grey;
+    }
+  }
+}

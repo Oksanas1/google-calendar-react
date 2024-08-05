@@ -1,0 +1,57 @@
+@import "../../../styles/varibles.scss";
+
+.modal {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &__content {
+    background: $color-white;
+    padding: 15px;
+    border: $border-btn;
+    border-radius: $border-radius;
+  }
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: $color-grey2;
+  z-index: 20;
+}
+
+.create-event {
+  display: flex;
+  flex-direction: column;
+
+  &__close-btn {
+    margin-left: auto;
+    transform: rotate(45deg) scale(2);
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    background: transparent;
+  }
+}
+
+.event-form {
+  display: flex;
+  flex-direction: column;
+
+  &__field {
+    margin: $unix;
+    border: none;
+  }
+
+  &__submit-btn {
+    margin: $unix;
+    color: $text-color-white;
+    background-color: $color-blue2;
+    padding: $unix 15px;
+    border-radius: $border-radius;
+  }
+}

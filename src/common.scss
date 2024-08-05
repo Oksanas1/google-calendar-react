@@ -1,0 +1,34 @@
+@import "./styles/varibles.scss";
+
+#root {
+  position: relative;
+}
+
+.button {
+  height: 40px;
+  border-radius: $border-radius;
+  border: $border-btn;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.icon-button {
+  outline: none;
+  border: none;
+  cursor: pointer;
+  background: transparent;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: $color-grey2;
+  z-index: 10;
+}
+
+.hidden {
+  display: none;
+}

@@ -1,0 +1,9 @@
+@import "../../styles/varibles.scss";
+
+.calendar {
+  &__day {
+    position: relative;
+    flex: 1;
+    border-left: $border-tbl;
+  }
+}

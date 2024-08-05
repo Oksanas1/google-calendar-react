@@ -1,0 +1,21 @@
+@import "../../styles/varibles.scss";
+
+.calendar {
+  &__time-scale {
+    height: 100%;
+    width: 50px;
+  }
+}
+
+.time-slot {
+  height: $height-box;
+  width: 50px;
+  text-align: right;
+
+  &__time {
+    font-size: 12px;
+    opacity: 0.7;
+    top: -10px;
+    margin-right: $unix;
+  }
+}

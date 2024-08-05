@@ -1,0 +1,16 @@
+@import "../../styles/varibles.scss";
+
+.popup {
+  position: absolute;
+  background: $color-white;
+  padding: 15px;
+  border: $border-tbl;
+  border-radius: $border-radius;
+  z-index: 25;
+
+  &__delet-btn {
+    padding: $unix 20px;
+    border: $border-btn;
+    border-radius: $border-radius;
+  }
+}

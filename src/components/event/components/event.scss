@@ -1,0 +1,40 @@
+@import "../../../styles/varibles.scss";
+
+.event {
+  position: absolute;
+  width: 80%;
+  background-color: $color-blue2;
+  border-radius: $border-radius;
+  padding: $unix;
+  color: $text-color-white;
+  z-index: 5;
+
+  &:hover {
+    font-weight: bold;
+    background-color: $color-red;
+  }
+
+  &__title {
+    font-size: 14px;
+    width: 100%;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
+  &__time {
+    font-size: 12px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    margin-top: $unix;
+    overflow: hidden;
+  }
+
+  &__description {
+    font-size: 12px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    margin-top: $unix;
+    overflow: hidden;
+  }
+}
