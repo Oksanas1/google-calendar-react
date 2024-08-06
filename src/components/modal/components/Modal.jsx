@@ -21,13 +21,13 @@ class Modal extends Component {
     if(event) {
       this.setState(event);
     } else {
-      const today = new Date().toLocaleTimeString();
-      const time = today.slice(0, 5);
+      const today = new Date();
+      const time = today.toLocaleTimeString().slice(0, 5);
 
       this.setState({
         startTime: addMinutes(time, 0),
         endTime: addMinutes(time, 15),
-        date: today.slice(0, 10),
+        date: today.toISOString().slice(0, 10),
       })
     }
   }
