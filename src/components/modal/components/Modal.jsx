@@ -27,7 +27,7 @@ class Modal extends Component {
       this.setState({
         startTime: addMinutes(time, 0),
         endTime: addMinutes(time, 15),
-        date: today.toISOString().slice(0, 10),
+        date: today.toLocaleDateString().split('/').reverse().join('-'),
       })
     }
   }
