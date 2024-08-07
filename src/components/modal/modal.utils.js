@@ -3,7 +3,7 @@ const addMinutes = (strTime, addMin) => {
   const totalMinutes = Math.round((hour * 60 + minute + addMin) / 15) * 15;
 
   if (totalMinutes > 1439) {
-    return `23:59`;
+    return "23:59";
   }
 
   const newHour = Math.floor(totalMinutes / 60);

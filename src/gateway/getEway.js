@@ -1,5 +1,5 @@
 const baseUrl = "https://666441d2932baf9032aa81f9.mockapi.io/api/v1/events";
-const defaultError = new Error("Response status:");
+const defaultError = "Response status: ";
 
 const mapList = (lists) =>
   lists.map(({ _id, dateFrom, dateTo, ...rest }) => ({
@@ -15,7 +15,7 @@ export const getEventsListsFromDB = () =>
       if (response.ok) {
         return response.json();
       }
-      return new Error(`${defaultError} ${response.status}`);
+      throw new Error(`${defaultError} ${response.status}`);
     })
     .then((lists) => mapList(lists));
 
@@ -33,17 +33,17 @@ export const createEventInDB = (event) =>
     if (response.ok) {
       return response.json();
     }
-    return new Error(`${defaultError} ${response.status}`);
+    throw new Error(`${defaultError} ${response.status}`);
   });
 
-export const deletEventInDB = (eventId) =>
+export const deleteEventInDB = (eventId) =>
   fetch(`${baseUrl}/${eventId}`, {
     method: "DELETE",
   }).then((response) => {
     if (response.ok) {
       return response.json();
     }
-    return new Error(`${defaultError} ${response.status}`);
+    throw new Error(`${defaultError} ${response.status}`);
   });
 
 export const updateEventInDB = (eventId, event) =>
@@ -57,5 +57,5 @@ export const updateEventInDB = (eventId, event) =>
     if (response.ok) {
       return response.json();
     }
-    return new Error(`${defaultError} ${response.status}`);
+    throw new Error(`${defaultError} ${response.status}`);
   });

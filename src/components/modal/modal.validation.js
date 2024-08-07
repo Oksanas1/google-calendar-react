@@ -38,7 +38,7 @@ const validateEvent = (newEvent, existingEvents) => {
   }
 
   if (textMessage.length > 0) {
-    alert(textMessage.join("<br/>"));
+    alert(textMessage.join("\n"));
   }
 
   return result;

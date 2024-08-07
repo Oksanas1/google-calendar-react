@@ -1,24 +1,24 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import updateListInDB from '../modal.actions';
-import validateEvent from '../modal.validation';
-import addMinutes from '../modal.utils';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { updateListInDB } from "../modal.actions";
+import validateEvent from "../modal.validation";
+import addMinutes from "../modal.utils";
 
-import './modal.scss';
+import "./modal.scss";
 
 class Modal extends Component {
   state = {
-    title: '',
-    startTime: '',
-    endTime: '',
-    description: '',
-    color: '#0000ff',
-    date: ''
-  }
+    title: "",
+    startTime: "",
+    endTime: "",
+    description: "",
+    date: "",
+    color: "",
+  };
 
   componentDidMount() {
-    const event = this.props.event;
-    if(event) {
+    const { event } = this.props;
+    if (event) {
       this.setState(event);
     } else {
       const today = new Date();
@@ -27,30 +27,34 @@ class Modal extends Component {
       this.setState({
         startTime: addMinutes(time, 0),
         endTime: addMinutes(time, 15),
-        date: today.toLocaleDateString().split('/').reverse().join('-'),
-      })
-    }
-  }
-
-  handleChange = target => {
-    const { name, value } = target;
-    this.setState({
-      [name]: value
-    })
-  }
-
-  handleSubmit = (event) => {
-    event.preventDefault();
-    if(validateEvent(this.state, [])) {
-      console.log(this.state)
-      const {updateTasks , handleClose } = this.props;
-      updateListInDB(this.state).then(() => {
-        updateTasks();
-        handleClose();
+        date: today.toLocaleDateString().split("/").reverse().join("-"),
+        color: "#0000ff",
       });
     }
   }
-  
+
+  handleChange = (target) => {
+    const { name, value } = target;
+    this.setState({
+      [name]: value,
+    });
+  };
+
+  handleSubmit = async (event) => {
+    event.preventDefault();
+    if (validateEvent(this.state, [])) {
+      const { updateTasks, handleClose } = this.props;
+      try {
+        await updateListInDB(this.state);
+
+        updateTasks();
+        handleClose();
+      } catch (error) {
+        console.error("Error updating list in DB:", error);
+      }
+    }
+  };
+
   render() {
     const { handleClose, event } = this.props;
     const { title, date, startTime, endTime, description, color } = this.state;
@@ -59,8 +63,10 @@ class Modal extends Component {
       <div className="modal overlay">
         <div className="modal__content">
           <div className="create-event">
-            <button className="create-event__close-btn" onClick={handleClose}>+</button>
-            <form className="event-form"  onSubmit={this.handleSubmit}>
+            <button className="create-event__close-btn" onClick={handleClose}>
+              +
+            </button>
+            <form className="event-form" onSubmit={this.handleSubmit}>
               <input
                 type="text"
                 name="title"
@@ -77,7 +83,7 @@ class Modal extends Component {
                   className="event-form__field"
                   value={date}
                   onChange={(e) => this.handleChange(e.target)}
-                 />
+                />
                 <input
                   type="time"
                   name="startTime"
@@ -110,7 +116,7 @@ class Modal extends Component {
                 onChange={(e) => this.handleChange(e.target)}
               />
               <button type="submit" className="event-form__submit-btn">
-                {(event) ? 'Edit' : 'Create'}
+                {event ? "Edit" : "Create"}
               </button>
             </form>
           </div>
@@ -124,7 +130,7 @@ Modal.propTypes = {
   handleClose: PropTypes.func.isRequired,
   updateTasks: PropTypes.func.isRequired,
   event: PropTypes.object,
-}
+};
 
 Modal.defaultProps = {
   event: null,

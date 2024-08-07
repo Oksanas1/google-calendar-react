@@ -1,3 +1,4 @@
+const path = require('path');
 module.exports = {
   extends: [
     'airbnb-base',
@@ -12,6 +13,10 @@ module.exports = {
   },
   parser: '@babel/eslint-parser',
   parserOptions: {
+    requireConfigFile: true,
+    babelOptions: {
+      configFile: path.resolve(__dirname, 'babel.config.js'),
+    },
     ecmaFeatures: {
       jsx: true,
     },
@@ -30,6 +35,7 @@ module.exports = {
     'import/no-extraneous-dependencies': 0,
     'arrow-body-style': 1,
     'prefer-arrow-callback': 1,
+    'import/no-cycle': 0,
   },
   settings: {
     'import/resolver': {

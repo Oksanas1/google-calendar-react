@@ -55,3 +55,6 @@ export const getDisplayedMonth = (dateStartWeek, dateEndWeek) => {
     ? `${months[startMonth]} - ${months[endMonth]} ${startYear}`
     : `${months[startMonth]} ${startYear} - ${months[endMonth]} ${endYear}`;
 };
+
+export const formatToEventTimeForForm = (date) =>
+  `${date.getHours()}:${formatMins(date.getMinutes())}`;

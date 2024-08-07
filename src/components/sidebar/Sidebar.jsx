@@ -1,6 +1,6 @@
-import React, { memo } from 'react';
+import React, { memo } from "react";
 
-import './sidebar.scss';
+import "./sidebar.scss";
 
 const Sidebar = () => {
   const hours = Array(24)

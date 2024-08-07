@@ -28,5 +28,3 @@ export const updateListInDB = (dataForm) => {
     ? updateEventInDB(dataForm.id, newObj)
     : createEventInDB(newObj);
 };
-
-export default updateListInDB;

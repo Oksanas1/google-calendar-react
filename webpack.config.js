@@ -10,17 +10,17 @@ module.exports = (env, argv) => {
     entry: './src/index.jsx',
     output: {
       filename: 'bundle.js',
-      publicPath: '',
+      path: path.resolve(__dirname, 'dist'),
     },
     module: {
       rules: [
         {
-          test: /.(js|jsx?)$/,
+          test: /\.(js|jsx?)$/,
           exclude: /node_modules/,
           use: ['babel-loader'],
         },
         {
-          test: /.s?css$/,
+          test: /\.s?css$/,
           use: [
             isProduction ? MiniCssExtractPlugin.loader : 'style-loader',
             'css-loader',

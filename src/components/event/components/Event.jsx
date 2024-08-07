@@ -1,18 +1,37 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
-import PropTypes from 'prop-types';
-import Popup from '../../popup/Popup';
-import calculatePosition from '../event.calculatePosition';
-import { deletEventInDB } from '../../../gateway/getEway';
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useMemo,
+  useCallback,
+} from "react";
+import PropTypes from "prop-types";
+import Popup from "../../popup/Popup";
+import calculatePosition from "../event.calculatePosition";
+import { deleteEventInDB } from "../../../gateway/getEway";
 
-import './event.scss';
+import "./event.scss";
 
-const Event = ({ id, height, marginTop, title, time, description, onDoubleClick, updateTasks, dateTo }) => {
+const Event = ({
+  id,
+  height,
+  marginTop,
+  title,
+  time,
+  description,
+  color,
+  onDoubleClick,
+  updateTasks,
+  dateTo,
+}) => {
   const [coordinates, setCoordinates] = useState({ top: 0, left: 0 });
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const eventRef = useRef(null);
   const clickTimer = useRef(null);
-  const currentTime = new Date();
-  let timeDiff = dateTo.getTime() - currentTime.getTime();
+  const timeDiff = useMemo(
+    () => dateTo.getTime() - new Date().getTime(),
+    [dateTo],
+  );
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -22,69 +41,85 @@ const Event = ({ id, height, marginTop, title, time, description, onDoubleClick,
     };
 
     if (isPopupOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener("mousedown", handleClickOutside);
     }
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
       if (clickTimer.current) {
         clearTimeout(clickTimer.current);
       }
     };
   }, [isPopupOpen]);
 
-  const handleClick = (e) => {
-    if (clickTimer.current) {
-      clearTimeout(clickTimer.current);
-    }
-
-    clickTimer.current = setTimeout(() => {
-      if (!isPopupOpen) {
-        setIsPopupOpen(true);
-        const { top, left } = calculatePosition(e, eventRef);
-        setCoordinates({ top, left });
+  const handleClick = useCallback(
+    (e) => {
+      if (clickTimer.current) {
+        clearTimeout(clickTimer.current);
       }
-    }, 300);
-  };
 
-  const handleDoubleClick = () => {
+      clickTimer.current = setTimeout(() => {
+        if (!isPopupOpen) {
+          setIsPopupOpen(true);
+          const { top, left } = calculatePosition(e, eventRef);
+          setCoordinates({ top, left });
+        }
+      }, 300);
+    },
+    [isPopupOpen],
+  );
+
+  const handleDoubleClick = useCallback(() => {
+    setIsPopupOpen(false);
     if (clickTimer.current) {
       clearTimeout(clickTimer.current);
     }
-    if (timeDiff > 600) {
-        setIsPopupOpen(false);
-        onDoubleClick();
-    } else {
-      alert('Event cannot be eddit within 15 minutes of its end time.');
+    if (timeDiff < 900000) {
+      alert("Event cannot be eddit within 15 minutes of its end time.");
+      return;
     }
-  };
 
-  const handleDelete = () => {
-    if (timeDiff > 600) {
-      deletEventInDB(id).then(() => {
-        updateTasks();
-        setIsPopupOpen(false);
-      });
-    } else {
-      alert('Event cannot be deleted within 15 minutes of its end time.');
+    onDoubleClick();
+  }, [onDoubleClick, timeDiff]);
+
+  const handleDelete = useCallback(async () => {
+    if (timeDiff < 900000) {
+      alert("Event cannot be deleted within 15 minutes of its end time.");
+      setIsPopupOpen(false);
+      return;
     }
-  };
 
-  const eventStyle = useMemo(() => ({
-    height,
-    marginTop,
-  }), [height, marginTop]);
+    try {
+      await deleteEventInDB(id);
+      updateTasks();
+      setIsPopupOpen(false);
+    } catch (error) {
+      alert("Error deleting event. Please try again.");
+    }
+  }, [id, timeDiff, updateTasks]);
+
+  const eventStyle = useMemo(
+    () => ({
+      height,
+      marginTop,
+      background: color,
+    }),
+    [height, marginTop, color],
+  );
 
   return (
-    <>
-      <div ref={eventRef} style={eventStyle} className="event" onClick={handleClick} onDoubleClick={handleDoubleClick}>
-        <h4 className="event__title">{title}</h4>
-        <p className="event__time">{time}</p>
-        <p className="event__description">{description}</p>
-        {isPopupOpen && <Popup style={coordinates} handleDelete={handleDelete} />}
-      </div>
-      </>
-
+    <div
+      ref={eventRef}
+      style={eventStyle}
+      className="event"
+      onClick={handleClick}
+      onDoubleClick={handleDoubleClick}
+    >
+      <h4 className="event__title">{title}</h4>
+      <p className="event__time">{time}</p>
+      <p className="event__description">{description}</p>
+      {isPopupOpen && <Popup style={coordinates} handleDelete={handleDelete} />}
+    </div>
   );
 };
 
@@ -95,13 +130,10 @@ Event.propTypes = {
   title: PropTypes.string.isRequired,
   time: PropTypes.string.isRequired,
   description: PropTypes.string,
+  color: PropTypes.string,
   onDoubleClick: PropTypes.func.isRequired,
   updateTasks: PropTypes.func.isRequired,
   dateTo: PropTypes.instanceOf(Date).isRequired,
-}
-
-Event.defaultTypes = {
-  description: '',
-}
+};
 
 export default Event;

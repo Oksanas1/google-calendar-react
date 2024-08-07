@@ -1,42 +1,37 @@
-import React, { useState, useContext } from 'react';
-import PropTypes from 'prop-types';
-import Modal from '../modal/components/Modal';
-import Event from '../event/components/Event.jsx';
-import { MyContext } from '../calendar/Calendar';
-import { formatMins } from '../../../src/utils/dateUtils.js';
+import React, { useState, useContext, useCallback } from "react";
+import PropTypes from "prop-types";
+import Modal from "../modal/components/Modal";
+import Event from "../event/components/Event.jsx";
+import { MyContext } from "../calendar/Calendar";
+import { formatToEventTimeForForm } from "../../utils/dateUtils.js";
 
-import './hour.scss';
+import "./hour.scss";
 
 const Hour = ({ dataHour, hourEvents }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [eventToEdit, setEventToEdit] = useState(null);
   const { updateTasks } = useContext(MyContext);
 
-  const onDoubleClick = ({ id, eventStart, eventEnd, title, description, dateFrom }) => {
+  const onDoubleClick = useCallback((event) => {
     setEventToEdit({
-      id,
-      startTime: eventStart,
-      endTime: eventEnd,
-      date: dateFrom.toISOString().slice(0, 10),
-      title,
-      description 
-    })
+      ...event,
+      startTime: event.eventStart,
+      endTime: event.eventEnd,
+      date: event.dateFrom.toLocaleDateString().split("/").reverse().join("-"),
+    });
     setIsModalOpen(true);
-  };
+  }, []);
 
-  const handleCloseModal = () => {
+  const handleCloseModal = useCallback(() => {
     setIsModalOpen(false);
-  }
+  }, []);
 
   return (
     <div className="calendar__time-slot" data-time={dataHour + 1}>
-      {hourEvents.map(({ id, dateFrom, dateTo, title, description }) => {
-        const eventStart = `${dateFrom.getHours()}:${formatMins(
-          dateFrom.getMinutes()
-        )}`;
-        const eventEnd = `${dateTo.getHours()}:${formatMins(
-          dateTo.getMinutes()
-        )}`;
+      {hourEvents.map((event) => {
+        const { id, dateFrom, dateTo, title, description, color } = event;
+        const eventStart = formatToEventTimeForForm(dateFrom);
+        const eventEnd = formatToEventTimeForForm(dateTo);
 
         return (
           <Event
@@ -47,21 +42,38 @@ const Hour = ({ dataHour, hourEvents }) => {
             time={`${eventStart} - ${eventEnd}`}
             title={title}
             description={description}
-            onDoubleClick={() => onDoubleClick({ id, eventStart, eventEnd, title, description, dateFrom })}
+            color={color}
+            onDoubleClick={() =>
+              onDoubleClick({ ...event, eventStart, eventEnd })
+            }
             updateTasks={updateTasks}
             dateTo={dateTo}
           />
         );
       })}
-      {isModalOpen && <Modal handleClose={handleCloseModal} updateTasks={updateTasks} event={eventToEdit} />}
+      {isModalOpen && (
+        <Modal
+          handleClose={handleCloseModal}
+          updateTasks={updateTasks}
+          event={eventToEdit}
+        />
+      )}
     </div>
   );
 };
 
 Hour.propTypes = {
   dataHour: PropTypes.number.isRequired,
-  hourEvents: PropTypes.arrayOf(PropTypes.object).isRequired,
-}
+  hourEvents: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      dateFrom: PropTypes.instanceOf(Date).isRequired,
+      dateTo: PropTypes.instanceOf(Date).isRequired,
+      title: PropTypes.string,
+      description: PropTypes.string,
+      color: PropTypes.string,
+    }),
+  ).isRequired,
+};
 
 export default Hour;
-
