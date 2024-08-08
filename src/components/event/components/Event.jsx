@@ -24,7 +24,7 @@ const Event = ({
   updateTasks,
   dateTo,
 }) => {
-  const [coordinates, setCoordinates] = useState({ top: 0, left: 0 });
+  const [coordinates, setCoordinates] = useState(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const eventRef = useRef(null);
   const clickTimer = useRef(null);
@@ -61,8 +61,8 @@ const Event = ({
       clickTimer.current = setTimeout(() => {
         if (!isPopupOpen) {
           setIsPopupOpen(true);
-          const { top, left } = calculatePosition(e, eventRef);
-          setCoordinates({ top, left });
+          const position = calculatePosition(e, eventRef);
+          setCoordinates(position);
         }
       }, 300);
     },
@@ -78,7 +78,6 @@ const Event = ({
       alert("Event cannot be eddit within 15 minutes of its end time.");
       return;
     }
-
     onDoubleClick();
   }, [onDoubleClick, timeDiff]);
 
@@ -108,16 +107,17 @@ const Event = ({
   );
 
   return (
-    <div
-      ref={eventRef}
-      style={eventStyle}
-      className="event"
-      onClick={handleClick}
-      onDoubleClick={handleDoubleClick}
-    >
-      <h4 className="event__title">{title}</h4>
-      <p className="event__time">{time}</p>
-      <p className="event__description">{description}</p>
+    <div className="event__wrap" style={eventStyle}>
+      <div
+        ref={eventRef}
+        className="event"
+        onClick={handleClick}
+        onDoubleClick={handleDoubleClick}
+      >
+        <h4 className="event__title">{title}</h4>
+        <p className="event__time">{time}</p>
+        <p className="event__description">{description}</p>
+      </div>
       {isPopupOpen && <Popup style={coordinates} handleDelete={handleDelete} />}
     </div>
   );
