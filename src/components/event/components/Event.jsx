@@ -107,15 +107,18 @@ const Event = ({
   );
 
   return (
-    <div className="event__wrap" style={eventStyle}>
+    <div className="event_wrap" style={eventStyle}>
       <div
         ref={eventRef}
         className="event"
         onClick={handleClick}
         onDoubleClick={handleDoubleClick}
+        style={{ background: color }}
       >
-        <h4 className="event__title">{title}</h4>
-        <p className="event__time">{time}</p>
+        <div className="event__header">
+          <h4 className="event__title">{title}</h4>
+          <p className="event__time">{time}</p>
+        </div>
         <p className="event__description">{description}</p>
       </div>
       {isPopupOpen && <Popup style={coordinates} handleDelete={handleDelete} />}
