@@ -1,10 +1,14 @@
-import React, { Component } from 'react';
-import moment from 'moment';
-import Header from './components/header/Header.jsx';
-import Calendar from './components/calendar/Calendar.jsx';
-import { getWeekStartDate, generateWeekRange, getDisplayedMonth } from '../src/utils/dateUtils.js';
+import React, { Component } from "react";
+import moment from "moment";
+import Header from "./components/header/Header.jsx";
+import Calendar from "./components/calendar/Calendar.jsx";
+import {
+  getWeekStartDate,
+  generateWeekRange,
+  getDisplayedMonth,
+} from "./utils/dateUtils.js";
 
-import './common.scss';
+import "./common.scss";
 
 class App extends Component {
   state = {
@@ -13,34 +17,36 @@ class App extends Component {
   };
 
   handleNextWeek = () => {
-      this.setState({
-        weekStartDate: moment(this.state.weekStartDate).add(7, 'days').format(),
-      })
-  }
+    this.setState({
+      weekStartDate: moment(this.state.weekStartDate).add(7, "days").format(),
+    });
+  };
 
   handlePrevWeek = () => {
-      this.setState({
-        weekStartDate: moment(this.state.weekStartDate).subtract(7, 'days').format(),
-      })
-  }
+    this.setState({
+      weekStartDate: moment(this.state.weekStartDate)
+        .subtract(7, "days")
+        .format(),
+    });
+  };
 
   handleCurrentWeek = () => {
-      this.setState({
-        weekStartDate: getWeekStartDate(new Date()),
-      })
-  }
+    this.setState({
+      weekStartDate: getWeekStartDate(new Date()),
+    });
+  };
 
   handleClose = () => {
     this.setState({
-      isOpen: false
-    })
-  }
+      isOpen: false,
+    });
+  };
 
   handleOpen = () => {
     this.setState({
-      isOpen: true
-    })
-  }
+      isOpen: true,
+    });
+  };
 
   render() {
     const { weekStartDate, isOpen } = this.state;
@@ -54,12 +60,13 @@ class App extends Component {
           handlePrevWeek={this.handlePrevWeek}
           handleNextWeek={this.handleNextWeek}
           currentMonth={currentMonth}
-          />
+        />
         <Calendar
           weekDates={weekDates}
           handleClose={this.handleClose}
+          handleOpen={this.handleOpen}
           isOpen={isOpen}
-          />
+        />
       </>
     );
   }

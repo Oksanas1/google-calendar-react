@@ -13,10 +13,19 @@ export const MyContext = createContext();
 class Calendar extends PureComponent {
   state = {
     events: [],
+    eventToEdit: null,
   };
 
   componentDidMount() {
     this.updateTasks();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.isOpen && !this.props.isOpen) {
+      this.setState({
+        eventToEdit: null,
+      });
+    }
   }
 
   updateTasks = () => {
@@ -24,15 +33,28 @@ class Calendar extends PureComponent {
       .then((list) => {
         this.setState({
           events: [...list],
+          eventToEdit: null,
         });
       })
       .catch((err) => console.error("Error loading events:", err));
   };
 
+  onEventToChange = (event) => {
+    this.setState({
+      eventToEdit: event,
+    });
+    this.props.handleOpen();
+  };
+
   render() {
     const { weekDates, isOpen, handleClose } = this.props;
     return (
-      <MyContext.Provider value={{ updateTasks: this.updateTasks }}>
+      <MyContext.Provider
+        value={{
+          updateTasks: this.updateTasks,
+          onEventToChange: this.onEventToChange,
+        }}
+      >
         <section className="calendar">
           <Navigation weekDates={weekDates} />
           <div className="calendar__body">
@@ -42,7 +64,11 @@ class Calendar extends PureComponent {
             </div>
           </div>
           {isOpen && (
-            <Modal handleClose={handleClose} updateTasks={this.updateTasks} />
+            <Modal
+              handleClose={handleClose}
+              updateTasks={this.updateTasks}
+              event={this.state.eventToEdit}
+            />
           )}
         </section>
       </MyContext.Provider>

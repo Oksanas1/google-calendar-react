@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { updateListInDB } from "../modal.actions";
 import validateEvent from "../modal.validation";
-import addMinutes from "../modal.utils";
+import { createNewFormData } from "../modal.utils";
 
 import "./modal.scss";
 
@@ -17,20 +17,7 @@ class Modal extends Component {
   };
 
   componentDidMount() {
-    const { event } = this.props;
-    if (event) {
-      this.setState(event);
-    } else {
-      const today = new Date();
-      const time = today.toLocaleTimeString().slice(0, 5);
-
-      this.setState({
-        startTime: addMinutes(time, 0),
-        endTime: addMinutes(time, 15),
-        date: today.toLocaleDateString().split("/").reverse().join("-"),
-        color: "#0000ff",
-      });
-    }
+    this.setState(createNewFormData(this.props.event));
   }
 
   handleChange = (target) => {

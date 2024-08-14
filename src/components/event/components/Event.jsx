@@ -107,9 +107,8 @@ const Event = ({
   );
 
   return (
-    <div className="event_wrap" style={eventStyle}>
+    <div className="event_wrap" style={eventStyle} ref={eventRef}>
       <div
-        ref={eventRef}
         className="event"
         onClick={handleClick}
         onDoubleClick={handleDoubleClick}

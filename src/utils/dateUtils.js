@@ -57,4 +57,4 @@ export const getDisplayedMonth = (dateStartWeek, dateEndWeek) => {
 };
 
 export const formatToEventTimeForForm = (date) =>
-  `${date.getHours()}:${formatMins(date.getMinutes())}`;
+  date.toTimeString().slice(0, 5);
