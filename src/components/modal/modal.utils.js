@@ -1,7 +1,9 @@
+import { formatToEventTimeForForm } from "../../utils/dateUtils.js";
+
 const addMinutes = (currDate, addMin) => {
   const totalMinutes =
     currDate.getHours() * 60 + currDate.getMinutes() + addMin;
-  const roundedMinutes = Math.min(Math.round(totalMinutes / 15) * 15, 1439); // 1439 minutes = 23:59
+  const roundedMinutes = Math.min(Math.round(totalMinutes / 15) * 15, 1439);
 
   const newHour = Math.floor(roundedMinutes / 60);
   const newMinute = roundedMinutes % 60;
@@ -11,8 +13,6 @@ const addMinutes = (currDate, addMin) => {
 
   return `${formattedHour}:${formattedMinute}`;
 };
-
-const getEventTime = (date) => date.toTimeString().slice(0, 5);
 
 const getDayForFormDateValue = (startEvent) =>
   startEvent
@@ -27,7 +27,7 @@ export const createNewFormData = (event) => {
 
   if (!event) {
     return {
-      startTime: getEventTime(currentDate),
+      startTime: formatToEventTimeForForm(currentDate),
       endTime: addMinutes(currentDate, 15),
       color: "#0000ff",
       date: getDayForFormDateValue(currentDate),
