@@ -28,7 +28,7 @@ export const createNewFormData = (event) => {
   if (!event) {
     return {
       startTime: formatToEventTimeForForm(currentDate),
-      endTime: addMinutes(currentDate, 15),
+      endTime: addMinutes(currentDate, 60),
       color: "#0000ff",
       date: getDayForFormDateValue(currentDate),
     };
