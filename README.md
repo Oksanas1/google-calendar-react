@@ -13,8 +13,6 @@ Layout support desktop (up-to-1920) version
 - [BEM methodology](https://en.bem.info/methodology/)
 - [js](https://developer.mozilla.org/)
 - [react](https://react.dev/)
-- [react:hooks](https://react.dev/reference/react/hooks)
-- [React DOM Components](https://react.dev/reference/react-dom/components)
 
 ### Authour
 

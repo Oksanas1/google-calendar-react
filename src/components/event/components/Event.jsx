@@ -8,7 +8,7 @@ import React, {
 import PropTypes from "prop-types";
 import Popup from "../../popup/Popup";
 import calculatePosition from "../event.calculatePosition";
-import { deleteEventInDB } from "../../../gateway/getEway";
+import { deleteEventInDB } from "../../../gateway/index";
 
 import "./event.scss";
 

@@ -1,4 +1,4 @@
-import { createEventInDB, updateEventInDB } from "../../gateway/getEway";
+import { createEventInDB, updateEventInDB } from "../../gateway/index";
 
 export const createnewObj = ({
   id,

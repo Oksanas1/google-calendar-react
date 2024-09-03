@@ -1,4 +1,4 @@
-import React, { useState, useContext, useCallback } from "react";
+import React, { useContext, useCallback } from "react";
 import PropTypes from "prop-types";
 import Event from "../event/components/Event.jsx";
 import { MyContext } from "../calendar/Calendar";

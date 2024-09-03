@@ -4,7 +4,7 @@ import Modal from "../modal/components/Modal";
 import Navigation from "../navigation/Navigation";
 import Week from "../week/Week";
 import Sidebar from "../sidebar/Sidebar";
-import { getEventsListsFromDB } from "../../gateway/getEway";
+import { getEventsListsFromDB } from "../../gateway/index";
 
 import "./calendar.scss";
 
