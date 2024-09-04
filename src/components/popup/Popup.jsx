@@ -6,7 +6,7 @@ import "./popup.scss";
 const Popup = ({ style, handleDelete }) => (
   <div className="popup" style={style}>
     <button className="popup__delet-btn" onClick={handleDelete}>
-      Delet
+      Delete
     </button>
   </div>
 );

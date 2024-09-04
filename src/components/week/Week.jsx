@@ -8,12 +8,12 @@ import "./week.scss";
 const Week = ({ weekDates, events }) => (
   <div className="calendar__week">
     {weekDates.map((dayStart) => {
-      const dayEnd = new Date(dayStart.getTime()).setHours(
-        dayStart.getHours() + 24,
-      );
+      const dayEnd = new Date(dayStart).setHours(23, 59, 59, 999);
 
       const dayEvents = events.filter(
-        (event) => event.dateFrom > dayStart && event.dateTo < new Date(dayEnd),
+        ({ dateFrom, dateTo }) =>
+          dateFrom.getTime() >= dayStart.getTime() &&
+          dateTo.getTime() <= dayEnd,
       );
 
       const isToday = moment().isSame(dayStart, "day");

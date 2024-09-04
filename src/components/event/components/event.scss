@@ -45,7 +45,7 @@
     margin: $unix;
     flex-grow: 1;
     font-size: 12px;
-    overflow-y: scroll;
+    overflow-y: auto;
     scrollbar-width: thin;
   }
 }
