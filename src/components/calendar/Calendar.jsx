@@ -1,89 +1,83 @@
-import React, { PureComponent, createContext } from "react";
+import React, { useState, createContext, useEffect } from "react";
 import PropTypes from "prop-types";
 import Modal from "../modal/components/Modal";
 import Navigation from "../navigation/Navigation";
 import Week from "../week/Week";
 import Sidebar from "../sidebar/Sidebar";
 import { getEventsListsFromDB } from "../../gateway/index";
+import { generateWeekRange } from "../../utils/dateUtils.js";
 
 import "./calendar.scss";
 
 export const MyContext = createContext();
 
-class Calendar extends PureComponent {
-  state = {
-    events: [],
-    eventToEdit: null,
-  };
+const Calendar = ({
+  weekStartDate,
+  handleOpenModal,
+  handleCloseModal,
+  isOpenModal,
+}) => {
+  const [events, setEvents] = useState([]);
+  const [eventToEdit, setEventToEdit] = useState(null);
+  const weekDates = generateWeekRange(weekStartDate);
 
-  componentDidMount() {
-    this.updateTasks();
-  }
-
-  componentDidUpdate(prevProps) {
-    if (prevProps.isOpen && !this.props.isOpen) {
-      this.setState({
-        eventToEdit: null,
-      });
+  useEffect(() => {
+    if (!isOpenModal) {
+      setEventToEdit(null);
     }
-  }
+  }, [isOpenModal]);
 
-  updateTasks = () => {
+  const updateTasks = () => {
     getEventsListsFromDB()
       .then((list) => {
-        this.setState({
-          events: [...list],
-          eventToEdit: null,
-        });
+        setEvents([...list]);
+        setEventToEdit(null);
       })
       .catch((err) => console.error("Error loading events:", err));
   };
 
-  onEventToChange = (event) => {
-    this.setState({
-      eventToEdit: event,
-    });
-    this.props.handleOpen();
+  useEffect(() => {
+    updateTasks();
+  }, []);
+
+  const onEventToChange = (event) => {
+    setEventToEdit(event);
+    handleOpenModal();
   };
 
-  render() {
-    const { weekDates, isOpen, handleClose } = this.props;
-    return (
-      <MyContext.Provider
-        value={{
-          updateTasks: this.updateTasks,
-          onEventToChange: this.onEventToChange,
-        }}
-      >
-        <section className="calendar">
-          <Navigation weekDates={weekDates} />
-          <div className="calendar__body">
-            <div className="calendar__week-container">
-              <Sidebar />
-              <Week weekDates={weekDates} events={this.state.events} />
-            </div>
+  return (
+    <MyContext.Provider
+      value={{
+        updateTasks,
+        onEventToChange,
+      }}
+    >
+      <section className="calendar">
+        <Navigation weekDates={weekDates} />
+        <div className="calendar__body">
+          <div className="calendar__week-container">
+            <Sidebar />
+            <Week weekDates={weekDates} events={events} />
           </div>
-          {isOpen && (
-            <Modal
-              handleClose={handleClose}
-              updateTasks={this.updateTasks}
-              event={this.state.eventToEdit}
-            />
-          )}
-        </section>
-      </MyContext.Provider>
-    );
-  }
-}
-
-Calendar.propTypes = {
-  weekDates: PropTypes.arrayOf(PropTypes.object).isRequired,
-  isOpen: PropTypes.bool,
-  handleClose: PropTypes.func.isRequired,
+        </div>
+        {isOpenModal && (
+          <Modal
+            handleCloseModal={handleCloseModal}
+            updateTasks={updateTasks}
+            eventToEdit={eventToEdit}
+            events={events}
+          />
+        )}
+      </section>
+    </MyContext.Provider>
+  );
 };
 
-Calendar.defaultProps = {
-  isOpen: false,
+Calendar.propTypes = {
+  isOpenModal: PropTypes.bool,
+  handleCloseModal: PropTypes.func.isRequired,
+  handleOpenModal: PropTypes.func.isRequired,
+  weekStartDate: PropTypes.object.isRequired,
 };
 
 export default Calendar;

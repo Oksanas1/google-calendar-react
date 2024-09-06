@@ -1,47 +1,51 @@
-import moment from "moment";
+const validateEventDuration = (start, end) => {
+  const eventDurationMinutes = (end - start) / 60000;
+  const errors = [];
 
-const validateEvent = (newEvent, existingEvents) => {
-  const { date, startTime, endTime } = newEvent;
-
-  let result = true;
-  const textMessage = [];
-  const eventStart = moment(`${date} ${startTime}`);
-  const eventEnd = moment(`${date} ${endTime}`);
-
-  if (!eventStart.isSame(eventEnd, "day")) {
-    textMessage.push("Event must start and end within the same day.");
-    result = false;
+  if (eventDurationMinutes > 360) {
+    errors.push("Event duration cannot exceed 6 hours.");
   }
 
-  const diffMinut = eventEnd.diff(eventStart, "minutes");
-  if (diffMinut > 360) {
-    textMessage.push("Event duration cannot exceed 6 hours.");
-    result = false;
+  if (eventDurationMinutes < 0) {
+    errors.push("Event cannot end before it starts.");
   }
 
-  if (diffMinut < 0) {
-    console.log(diffMinut);
-    textMessage.push("Event cannot end before start");
-    result = false;
-  }
+  return errors;
+};
 
-  const isOverlapping = existingEvents.some((event) => {
-    const existingStart = moment(`${event.date} ${event.startTime}`);
-    const existingEnd = moment(`${event.date} ${event.endTime}`);
+const checkForOverlaps = (newEvent, existingEvents) => {
+  const { id: newEventId } = newEvent;
+  const newEventStart = new Date(newEvent.dateFrom).getTime();
+  const newEventEnd = new Date(newEvent.dateTo).getTime();
 
-    return eventStart.isBefore(existingEnd) && eventEnd.isAfter(existingStart);
+  const isOverlapping = existingEvents.some(({ id, dateFrom, dateTo }) => {
+    if (id === newEventId) {
+      return false;
+    }
+
+    const existingEventStart = new Date(dateFrom).getTime();
+    const existingEventEnd = new Date(dateTo).getTime();
+
+    return newEventStart < existingEventEnd && newEventEnd > existingEventStart;
   });
 
-  if (isOverlapping) {
-    textMessage.push("Events cannot overlap.");
-    result = false;
+  return isOverlapping ? ["Events cannot overlap."] : [];
+};
+
+export const validateEvent = async (newEvent, existingEvents) => {
+  const newEventStart = new Date(newEvent.dateFrom).getTime();
+  const newEventEnd = new Date(newEvent.dateTo).getTime();
+
+  const errors = [
+    ...validateEventDuration(newEventStart, newEventEnd),
+    ...checkForOverlaps(newEvent, existingEvents),
+  ];
+
+  if (errors.length > 0) {
+    alert(errors.join("\n"));
   }
 
-  if (textMessage.length > 0) {
-    alert(textMessage.join("\n"));
-  }
-
-  return result;
+  return errors.length === 0;
 };
 
 export default validateEvent;

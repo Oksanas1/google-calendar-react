@@ -1,75 +1,39 @@
-import React, { Component } from "react";
-import moment from "moment";
+import React, { useState } from "react";
 import Header from "./components/header/Header.jsx";
 import Calendar from "./components/calendar/Calendar.jsx";
-import {
-  getWeekStartDate,
-  generateWeekRange,
-  getDisplayedMonth,
-} from "./utils/dateUtils.js";
+import { getWeekStartDate } from "./utils/dateUtils.js";
 
 import "./common.scss";
 
-class App extends Component {
-  state = {
-    weekStartDate: getWeekStartDate(new Date()),
-    isOpen: false,
+const App = () => {
+  const [weekStartDate, setWeekStartDate] = useState(
+    getWeekStartDate(new Date()),
+  );
+  const [isOpenModal, setIsOpenModal] = useState(false);
+
+  const handleCloseModal = () => {
+    setIsOpenModal(false);
   };
 
-  handleNextWeek = () => {
-    this.setState({
-      weekStartDate: moment(this.state.weekStartDate).add(7, "days").format(),
-    });
+  const handleOpenModal = () => {
+    setIsOpenModal(true);
   };
 
-  handlePrevWeek = () => {
-    this.setState({
-      weekStartDate: moment(this.state.weekStartDate)
-        .subtract(7, "days")
-        .format(),
-    });
-  };
-
-  handleCurrentWeek = () => {
-    this.setState({
-      weekStartDate: getWeekStartDate(new Date()),
-    });
-  };
-
-  handleClose = () => {
-    this.setState({
-      isOpen: false,
-    });
-  };
-
-  handleOpen = () => {
-    this.setState({
-      isOpen: true,
-    });
-  };
-
-  render() {
-    const { weekStartDate, isOpen } = this.state;
-    const weekDates = generateWeekRange(weekStartDate);
-    const currentMonth = getDisplayedMonth(weekDates[0], weekDates[6]);
-    return (
-      <>
-        <Header
-          handleOpen={this.handleOpen}
-          handleCurrentWeek={this.handleCurrentWeek}
-          handlePrevWeek={this.handlePrevWeek}
-          handleNextWeek={this.handleNextWeek}
-          currentMonth={currentMonth}
-        />
-        <Calendar
-          weekDates={weekDates}
-          handleClose={this.handleClose}
-          handleOpen={this.handleOpen}
-          isOpen={isOpen}
-        />
-      </>
-    );
-  }
-}
+  return (
+    <>
+      <Header
+        handleOpenModal={handleOpenModal}
+        setWeekStartDate={setWeekStartDate}
+        weekStartDate={weekStartDate}
+      />
+      <Calendar
+        weekStartDate={weekStartDate}
+        handleCloseModal={handleCloseModal}
+        handleOpenModal={handleOpenModal}
+        isOpenModal={isOpenModal}
+      />
+    </>
+  );
+};
 
 export default App;

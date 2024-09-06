@@ -8,6 +8,7 @@
   color: $text-color-white;
   z-index: 5;
   overflow: hidden;
+  cursor: pointer;
 
   &:hover {
     font-weight: bold;
