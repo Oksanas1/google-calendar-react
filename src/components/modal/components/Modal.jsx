@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { updateListInDB } from "../modal.actions";
-import { validateEvent } from "../modal.validation";
+import validateEventData from "../modal.validation";
 import { createNewFormData } from "../modal.utils";
 
 import "./modal.scss";
@@ -17,9 +17,10 @@ const Modal = ({ events, updateTasks, handleCloseModal, eventToEdit }) => {
   });
 
   useEffect(() => {
-    if (eventToEdit) {
-      setNewEvent(createNewFormData(eventToEdit));
-    }
+    setNewEvent((prevEvent) => ({
+      ...prevEvent,
+      ...createNewFormData(eventToEdit),
+    }));
   }, []);
 
   const handleChangeDataForm = (target) => {
@@ -32,7 +33,8 @@ const Modal = ({ events, updateTasks, handleCloseModal, eventToEdit }) => {
 
   const handleSubmitForm = async (e) => {
     e.preventDefault();
-    if (validateEvent(newEvent, events)) {
+    console.log(newEvent);
+    if (await validateEventData(newEvent, events)) {
       try {
         await updateListInDB(newEvent);
 

@@ -1,5 +1,15 @@
-const validateEventDuration = (start, end) => {
-  const eventDurationMinutes = (end - start) / 60000;
+const validateEventDuration = (startTime, endTime) => {
+  const [newEventStartHours, newEventStartMinutets] = startTime.split(":");
+  const newEventStartTime = new Date().setHours(
+    +newEventStartHours,
+    +newEventStartMinutets,
+  );
+  const [newEventEndHours, newEventEndMinutets] = endTime.split(":");
+  const newEventEndTime = new Date().setHours(
+    +newEventEndHours,
+    +newEventEndMinutets,
+  );
+  const eventDurationMinutes = (newEventEndTime - newEventStartTime) / 60000;
   const errors = [];
 
   if (eventDurationMinutes > 360) {
@@ -33,11 +43,8 @@ const checkForOverlaps = (newEvent, existingEvents) => {
 };
 
 export const validateEvent = async (newEvent, existingEvents) => {
-  const newEventStart = new Date(newEvent.dateFrom).getTime();
-  const newEventEnd = new Date(newEvent.dateTo).getTime();
-
   const errors = [
-    ...validateEventDuration(newEventStart, newEventEnd),
+    ...validateEventDuration(newEvent.startTime, newEvent.endTime),
     ...checkForOverlaps(newEvent, existingEvents),
   ];
 
