@@ -1,4 +1,4 @@
-import { formatToEventTimeForForm } from "../../utils/dateUtils.js";
+import { formatToEventTimeForForm } from "../../../utils/dateUtils.js";
 
 const addMinutes = (currDate, addMin) => {
   const totalMinutes =

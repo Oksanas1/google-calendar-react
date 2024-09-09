@@ -1,14 +1,6 @@
 const baseUrl = "https://666441d2932baf9032aa81f9.mockapi.io/api/v1/events";
 const defaultError = "Response status: ";
 
-const mapList = (lists) =>
-  lists.map(({ _id, dateFrom, dateTo, ...rest }) => ({
-    id: _id,
-    dateFrom: new Date(dateFrom),
-    dateTo: new Date(dateTo),
-    ...rest,
-  }));
-
 export const getEventsListsFromDB = () =>
   fetch(`${baseUrl}`)
     .then((response) => {
@@ -17,7 +9,14 @@ export const getEventsListsFromDB = () =>
       }
       throw new Error(`${defaultError} ${response.status}`);
     })
-    .then((lists) => mapList(lists));
+    .then((lists) =>
+      lists.map(({ _id, dateFrom, dateTo, ...rest }) => ({
+        id: _id,
+        dateFrom: new Date(dateFrom),
+        dateTo: new Date(dateTo),
+        ...rest,
+      })),
+    );
 
 export const getEventByIdFormDB = (eventId) =>
   fetch(`${baseUrl}/${eventId}`).then((lists) => lists.json());

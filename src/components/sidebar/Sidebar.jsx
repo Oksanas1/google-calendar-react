@@ -3,7 +3,7 @@ import React, { memo } from "react";
 import "./sidebar.scss";
 
 const Sidebar = () => {
-  const hours = Array.from({ length: 24 }, (val, index) => index);
+  const hours = Array.from({ length: 24 }, (_, index) => index);
 
   return (
     <div className="calendar__time-scale">

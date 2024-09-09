@@ -1,6 +1,6 @@
 import React, { useState, createContext, useEffect } from "react";
 import PropTypes from "prop-types";
-import Modal from "../modal/components/Modal";
+import Modal from "../modal/Modal.jsx";
 import Navigation from "../navigation/Navigation";
 import Week from "../week/Week";
 import Sidebar from "../sidebar/Sidebar";

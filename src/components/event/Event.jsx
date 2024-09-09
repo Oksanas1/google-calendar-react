@@ -6,11 +6,13 @@ import React, {
   useCallback,
 } from "react";
 import PropTypes from "prop-types";
-import Popup from "../../popup/Popup";
-import calculatePosition from "../event.calculatePosition";
-import { deleteEventInDB } from "../../../gateway/index";
+import Popup from "../popup/Popup";
+import calculatePosition from "./utils/calculatePosition";
+import { deleteEventInDB } from "../../gateway/index";
 
 import "./event.scss";
+
+const MAX_TIMEOUT = 900000;
 
 const Event = ({
   id,
@@ -74,7 +76,7 @@ const Event = ({
     if (clickTimer.current) {
       clearTimeout(clickTimer.current);
     }
-    if (timeDiff < 900000) {
+    if (timeDiff < MAX_TIMEOUT) {
       alert("Event cannot be eddit within 15 minutes of its end time.");
       return;
     }
@@ -82,7 +84,7 @@ const Event = ({
   }, [onDoubleClick, timeDiff]);
 
   const handleDelete = useCallback(async () => {
-    if (timeDiff < 900000) {
+    if (timeDiff < MAX_TIMEOUT) {
       alert("Event cannot be deleted within 15 minutes of its end time.");
       setIsPopupOpen(false);
       return;

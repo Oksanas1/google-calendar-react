@@ -1,10 +1,12 @@
 import React, { useContext, useCallback } from "react";
 import PropTypes from "prop-types";
-import Event from "../event/components/Event.jsx";
+import Event from "../event/Event.jsx";
 import { MyContext } from "../calendar/Calendar";
 import { formatToEventTimeForForm } from "../../utils/dateUtils.js";
 
 import "./hour.scss";
+
+const HEIGHT_BLOCK = 60000;
 
 const Hour = ({ dataHour, hourEvents }) => {
   const { updateTasks, onEventToChange } = useContext(MyContext);
@@ -24,7 +26,7 @@ const Hour = ({ dataHour, hourEvents }) => {
           <Event
             key={id}
             id={id}
-            height={(dateTo.getTime() - dateFrom.getTime()) / (1000 * 60)}
+            height={(dateTo.getTime() - dateFrom.getTime()) / HEIGHT_BLOCK}
             marginTop={dateFrom.getMinutes()}
             time={`${startTime} - ${endTime}`}
             title={title}

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { updateListInDB } from "../modal.actions";
-import validateEventData from "../modal.validation";
-import { createNewFormData } from "../modal.utils";
+import { updateListInDB } from "./utils/actions";
+import validateEventData from "./utils/validation";
+import { createNewFormData } from "./utils/utils";
 
 import "./modal.scss";
 
@@ -33,7 +33,7 @@ const Modal = ({ events, updateTasks, handleCloseModal, eventToEdit }) => {
 
   const handleSubmitForm = async (e) => {
     e.preventDefault();
-    console.log(newEvent);
+
     if (await validateEventData(newEvent, events)) {
       try {
         await updateListInDB(newEvent);
@@ -119,6 +119,7 @@ Modal.propTypes = {
   handleCloseModal: PropTypes.func.isRequired,
   updateTasks: PropTypes.func.isRequired,
   event: PropTypes.object,
+  eventToEdit: PropTypes.object,
 };
 
 export default Modal;

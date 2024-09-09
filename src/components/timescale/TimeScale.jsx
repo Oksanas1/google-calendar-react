@@ -54,7 +54,7 @@ const TimeScale = () => {
       className="red-line"
       ref={redLineRef}
       style={{ top: `${calculateRedLinePosition()}px` }}
-    ></div>
+    />
   );
 };
 
